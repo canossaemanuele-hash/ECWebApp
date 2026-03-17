@@ -88,7 +88,7 @@
         .btn-submit:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
         .trust-badge { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--accent); margin-top: 15px; font-weight: 600; }
 
-        /* PACCHETTI E GRIGLIE RESPONSIVE FIXATE */
+        /* PACCHETTI E GRIGLIE (AGGIORNATE CON SCONTO SETUP) */
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; margin-top: 20px; align-items: stretch; }
         .pricing-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: var(--radius-lg); padding: 35px 25px; display: flex; flex-direction: column; position: relative; transition: transform 0.4s, border-color 0.3s; }
         .pricing-card:hover { transform: scale(1.02); border-color: rgba(241, 245, 249, 0.2); box-shadow: var(--shadow-modern); }
@@ -98,12 +98,13 @@
         .p-tier { font-size: 22px; font-weight: 800; color: var(--text-light); margin-bottom: 8px; }
         .p-desc { font-size: 14px; color: var(--text-muted-dark); margin-bottom: 25px; min-height: 40px; line-height: 1.5; font-weight: 400;}
         
-        /* Modifica UI Prezzi: Mensile + Opzione Annuale */
+        /* Modifica UI Prezzi: Sconto Setup + Mensile */
         .p-price { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); }
-        .p-setup { font-size: 32px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; }
+        .p-strike { font-size: 16px; color: var(--text-muted-dark); text-decoration: line-through; margin-bottom: 8px; font-weight: 600; }
+        .p-strike-badge { background: rgba(239, 68, 68, 0.15); color: #EF4444; font-size: 10px; padding: 4px 8px; border-radius: 8px; margin-left: 8px; vertical-align: text-bottom; font-weight: 800; text-decoration: none !important; display: inline-block; letter-spacing: 0.5px;}
+        .p-setup { font-size: 38px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; line-height: 1; }
         .p-setup span { font-size: 15px; color: var(--text-muted-dark); font-weight: 500; letter-spacing: normal; }
-        .p-monthly { font-size: 16px; color: var(--text-light); font-weight: 700; margin-top: 8px; display: flex; align-items: center; gap: 8px; }
-        .p-annual { font-size: 13px; color: var(--accent); margin-top: 15px; background: rgba(45, 212, 191, 0.1); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(45, 212, 191, 0.2); font-weight: 600; display: inline-block; }
+        .p-monthly { font-size: 15px; color: var(--accent); font-weight: 700; margin-top: 15px; display: inline-block; background: rgba(45, 212, 191, 0.1); padding: 8px 14px; border-radius: 8px; border: 1px solid rgba(45, 212, 191, 0.2); }
         
         .p-features { list-style: none; padding: 0; margin: 0 0 35px 0; flex-grow: 1; }
         .p-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-light); margin-bottom: 16px; font-weight: 500; line-height: 1.4;}
@@ -159,7 +160,7 @@
                     Trasformo il tuo business con Web App su misura. Ricevi appuntamenti, vendi online e gestisci i clienti via WhatsApp, dimenticando i software in abbonamento e le agende cartacee.
                 </p>
                 <button onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))" style="background: var(--primary); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 25px var(--primary); font-family: inherit;">
-                    Esplora le Soluzioni Software
+                    Esplora le Soluzioni
                 </button>
 
                 <div style="margin-top: 55px; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 35px;">
@@ -208,9 +209,9 @@
                     <div class="p-desc">Per chi vuole presentare il proprio business con una Web App installabile.</div>
                     
                     <div class="p-price">
+                        <div class="p-strike">350€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup">250€ <span>/ Setup unico</span></div>
                         <div class="p-monthly">+ 49€ / mese gestione</div>
-                        <div class="p-annual">⚡ Oppure 740€ / anno (2 mesi gratis)</div>
                     </div>
 
                     <ul class="p-features"><li>Creazione Web App (PWA)</li><li>Sezioni Chi Sono / Servizi</li><li><b>Modulo Contatti base</b></li><li>Dashboard Admin essenziale</li><li>Dominio e Hosting inclusi</li></ul>
@@ -223,9 +224,9 @@
                     <div class="p-desc">Calendario appuntamenti integrato per far prenotare i clienti in autonomia h24.</div>
                     
                     <div class="p-price">
+                        <div class="p-strike">500€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup" style="color: var(--primary);">350€ <span>/ Setup unico</span></div>
-                        <div class="p-monthly">+ 149€ / mese gestione</div>
-                        <div class="p-annual" style="background: rgba(129, 140, 248, 0.1); border-color: rgba(129, 140, 248, 0.2); color: var(--primary-light);">⚡ Oppure 1.840€ / anno (2 mesi gratis)</div>
+                        <div class="p-monthly" style="background: rgba(129, 140, 248, 0.1); border-color: rgba(129, 140, 248, 0.2); color: var(--primary-light);">+ 149€ / mese gestione</div>
                     </div>
 
                     <ul class="p-features"><li><b>Tutto il piano Starter</b></li><li><b>Calendario Appuntamenti</b></li><li>Gestione orari e slot</li><li>Pannello approvazione</li><li>Integrazione chat WhatsApp</li></ul>
@@ -237,9 +238,9 @@
                     <div class="p-desc">Vendi i tuoi prodotti o accetta ordini di asporto direttamente dall'App.</div>
                     
                     <div class="p-price">
+                        <div class="p-strike">650€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup">450€ <span>/ Setup unico</span></div>
                         <div class="p-monthly">+ 299€ / mese gestione</div>
-                        <div class="p-annual">⚡ Oppure 3.440€ / anno (2 mesi gratis)</div>
                     </div>
 
                     <ul class="p-features"><li><b>Tutto il piano Pro Booking</b></li><li><b>Catalogo prodotti dinamico</b></li><li><b>Carrello acquisti</b> in App</li><li>Ordini diretti su WA o Stripe</li><li>Zero commissioni vendite</li></ul>
@@ -261,9 +262,9 @@
                         <label>Servizio Software di Interesse</label>
                         <select id="con-pacchetto">
                             <option value="">Seleziona un'opzione...</option>
-                            <option value="Starter">Starter Vetrina (Mensile o Annuale)</option>
-                            <option value="Pro Booking">Pro Booking (Mensile o Annuale)</option>
-                            <option value="VIP E-Commerce">VIP E-Commerce (Mensile o Annuale)</option>
+                            <option value="Starter">Starter Vetrina (Setup 250€ + 49€/m)</option>
+                            <option value="Pro Booking">Pro Booking (Setup 350€ + 149€/m)</option>
+                            <option value="VIP E-Commerce">VIP E-Commerce (Setup 450€ + 299€/m)</option>
                             <option value="Altro">Vorrei un software personalizzato / Info Generiche</option>
                         </select>
                     </div>
@@ -341,7 +342,6 @@
             document.getElementById(id).classList.add('active');
             if (el) el.classList.add('active');
             if(!bloccaScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-            
             if(id === 'admin') caricaRichiesteAdmin();
         };
 
@@ -390,7 +390,7 @@
         };
 
         // ==========================================
-        // 4. LOGICA DATABASE (FORM PUBBLICO)
+        // 4. LOGICA DATABASE
         // ==========================================
         window.inviaRichiesta = async function() {
             const pacchetto = document.getElementById('con-pacchetto').value;
@@ -420,8 +420,7 @@
             }]);
 
             if (error) {
-                showToast("Errore di connessione al database.", true);
-                console.error(error);
+                showToast("Errore di connessione al database.", true); console.error(error);
             } else {
                 showToast("Richiesta inviata con successo!");
                 document.getElementById('con-pacchetto').value = '';
@@ -435,7 +434,7 @@
         };
 
         // ==========================================
-        // 5. LOGICA ADMIN (GESTIONE DATI E STATI)
+        // 5. LOGICA ADMIN
         // ==========================================
         window.setAdminFiltro = function(stato) {
             filtroAdminCorrente = stato;
