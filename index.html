@@ -170,6 +170,7 @@
                         <span class="target-badge">⚕️ Studi Medici & Cliniche</span>
                         <span class="target-badge">☕ Ristorazione & Asporto</span>
                         <span class="target-badge">🛍️ Negozi al Dettaglio</span>
+                        <span class="target-badge" style="background: transparent; border: 1px dashed rgba(148, 163, 184, 0.5); opacity: 0.9;">➕ E molti altri...</span>
                     </div>
                 </div>
             </div>
@@ -449,7 +450,6 @@
                 let dataCreazione = new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
                 let telWA = p.telefono.replace(/\D/g, ''); if(telWA.startsWith('3')) telWA = '39' + telWA;
                 
-                // Nomi per i messaggi e l'interfaccia (con fallback se vuoti per vecchi dati)
                 let nomePersona = p.nome_cliente || "Cliente";
                 let emailPersona = p.email || "Non fornita";
                 
