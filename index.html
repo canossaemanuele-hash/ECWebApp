@@ -88,8 +88,8 @@
         /* FORM */
         .form-group { margin-bottom: 22px; text-align: left; width: 100%; }
         .form-group label { font-size: 13px; color: var(--text-muted-dark); font-weight: 700; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px; border: 2px solid var(--bg-card); border-radius: 14px; font-family: inherit; font-size: 15px; background: var(--bg-card); color: var(--text-light); transition: all 0.3s ease; outline: none; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); background: #263145; box-shadow: 0 0 15px var(--primary-glow); }
+        .form-group input[type="text"], .form-group input[type="tel"], .form-group input[type="email"], .form-group select, .form-group textarea { width: 100%; padding: 16px; border: 2px solid var(--bg-card); border-radius: 14px; font-family: inherit; font-size: 15px; background: var(--bg-card); color: var(--text-light); transition: all 0.3s ease; outline: none; }
+        .form-group input[type="text"]:focus, .form-group input[type="tel"]:focus, .form-group input[type="email"]:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); background: #263145; box-shadow: 0 0 15px var(--primary-glow); }
         .btn-submit { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: 700; width: 100%; transition: all 0.3s; box-shadow: 0 5px 15px var(--primary-glow); font-family: inherit;}
         .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); background-color: #6366F1; }
         .btn-submit:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -337,6 +337,15 @@
                         <textarea id="con-note" rows="3" placeholder="Es: Vorrei far prenotare tagli di capelli ai miei clienti..."></textarea>
                     </div>
 
+                    <div class="form-group" style="margin-bottom: 25px; background: rgba(15, 23, 42, 0.4); padding: 15px; border-radius: 12px; border: 1px solid rgba(148, 163, 184, 0.1);">
+                        <div style="display: flex; align-items: flex-start; gap: 12px; text-align: left;">
+                            <input type="checkbox" id="con-privacy" style="width: 20px; height: 20px; margin-top: 2px; cursor: pointer; accent-color: var(--primary); flex-shrink: 0;">
+                            <label for="con-privacy" style="font-size: 13px; color: var(--text-muted-dark); font-weight: 500; line-height: 1.5; text-transform: none; margin: 0;">
+                                Dichiaro di aver letto la <a href="#" style="color: var(--primary-light); text-decoration: underline;">Privacy Policy</a> e acconsento al trattamento dei miei dati personali per gestire questa richiesta.
+                            </label>
+                        </div>
+                    </div>
+
                     <button id="btn-invia" class="btn-submit" onclick="inviaRichiesta()">📩 Invia Richiesta (Senza Impegno)</button>
                     <div class="trust-badge">
                         🔒 Nessun pagamento richiesto in questa fase.
@@ -471,7 +480,7 @@
         };
 
         // ==========================================
-        // 4. LOGICA DATABASE
+        // 4. LOGICA DATABASE CON CONTROLLO PRIVACY
         // ==========================================
         window.inviaRichiesta = async function() {
             const pacchetto = document.getElementById('con-pacchetto').value;
@@ -480,9 +489,17 @@
             const tel = document.getElementById('con-tel').value.trim();
             const email = document.getElementById('con-email').value.trim();
             const note = document.getElementById('con-note').value.trim();
+            
+            // CONTROLLO PRIVACY
+            const privacyAccettata = document.getElementById('con-privacy').checked;
 
             if(!pacchetto || !nomeCliente || !attivita || !tel) {
                 showToast("Compila i campi obbligatori (Pacchetto, Nome, Attività, Cellulare).", true); return;
+            }
+            
+            // SE LA SPUNTA NON È ATTIVA, BLOCCA L'INVIO
+            if(!privacyAccettata) {
+                showToast("Devi accettare la Privacy Policy per inviare la richiesta.", true); return;
             }
 
             const btn = document.getElementById('btn-invia');
@@ -510,6 +527,7 @@
                 document.getElementById('con-tel').value = '';
                 document.getElementById('con-email').value = '';
                 document.getElementById('con-note').value = '';
+                document.getElementById('con-privacy').checked = false; // Reset spunta privacy
             }
             btn.disabled = false; btn.innerText = "📩 Invia Richiesta (Senza Impegno)";
         };
