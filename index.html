@@ -45,7 +45,7 @@
             --radius-md: 16px;
         }
 
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); background-image: var(--bg-body-gradient); color: var(--text-light); display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; position: relative; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); background-image: var(--bg-body-gradient); color: var(--text-light); display: flex; flex-direction: column; align-items: center; -webkit-font-smoothing: antialiased; position: relative; min-height: 100vh;}
         
         /* SFONDI DINAMICI */
         .bg-blob { position: absolute; width: 400px; height: 400px; border-radius: 50%; opacity: 0.15; filter: blur(100px); z-index: -1; animation: blobMove 15s infinite alternate ease-in-out; pointer-events: none; }
@@ -65,7 +65,7 @@
         nav button:hover { background: rgba(148, 163, 184, 0.1); color: var(--primary); }
         nav button.active { background: var(--primary); color: white; box-shadow: 0 5px 15px var(--primary-glow); }
 
-        main { width: 95%; max-width: 1100px; margin: 50px auto; position: relative; z-index: 1; }
+        main { width: 95%; max-width: 1100px; margin: 50px auto; position: relative; z-index: 1; flex-grow: 1;}
         .section { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .section.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -75,8 +75,15 @@
         .info-card:hover { border-color: var(--primary); box-shadow: 0 10px 40px var(--primary-glow); }
         h2.section-title { color: var(--text-light); margin-top: 0; font-size: 28px; padding-bottom: 15px; margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; text-shadow: 0 0 10px rgba(241, 245, 249, 0.1); }
         h2.section-title span { color: var(--primary); }
-        .target-badge { padding: 10px 18px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--text-light); transition: all 0.3s; backdrop-filter: blur(5px); display: inline-flex; align-items: center; gap: 8px; cursor: default; }
+        
+        /* CHICCA: Badge Cliccabili */
+        .target-badge { padding: 10px 18px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--text-light); transition: all 0.3s; backdrop-filter: blur(5px); display: inline-flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
         .target-badge:hover { background: rgba(129, 140, 248, 0.15); border-color: var(--primary); color: var(--primary-light); transform: translateY(-3px); box-shadow: 0 5px 15px var(--primary-glow); }
+
+        /* FAQ Section */
+        .faq-item { background: rgba(15, 23, 42, 0.5); border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(148, 163, 184, 0.1); }
+        .faq-q { font-weight: 700; color: var(--primary-light); margin-bottom: 8px; font-size: 15px; display: flex; align-items: flex-start; gap: 8px;}
+        .faq-a { color: var(--text-muted-dark); font-size: 14px; line-height: 1.6; }
 
         /* FORM */
         .form-group { margin-bottom: 22px; text-align: left; width: 100%; }
@@ -89,7 +96,7 @@
         .trust-badge { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--accent); margin-top: 15px; font-weight: 600; }
 
         /* PACCHETTI E GRIGLIE */
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; align-items: stretch; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; align-items: stretch; margin-bottom: 40px;}
         .pricing-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: var(--radius-lg); padding: 35px 25px; display: flex; flex-direction: column; position: relative; transition: transform 0.4s, border-color 0.3s; }
         .pricing-card:hover { transform: scale(1.02); border-color: rgba(241, 245, 249, 0.2); box-shadow: var(--shadow-modern); }
         .pricing-card.popular { border: 2px solid var(--primary); box-shadow: 0 15px 40px var(--primary-glow); z-index: 10; }
@@ -127,6 +134,9 @@
         .admin-tab.active { background: rgba(129, 140, 248, 0.15); border-color: var(--primary); color: var(--primary-light); box-shadow: 0 0 10px var(--primary-glow); }
         .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 14px; margin-bottom: 12px; gap: 15px; flex-wrap: wrap; transition: transform 0.2s; }
         .admin-row:hover { transform: scale(1.01); background: rgba(30, 41, 59, 0.8); border-color: rgba(148, 163, 184, 0.3); }
+
+        /* FOOTER */
+        footer { width: 100%; text-align: center; padding: 30px; margin-top: 30px; border-top: 1px solid rgba(148, 163, 184, 0.1); color: var(--text-muted-dark); font-size: 13px; font-weight: 500; }
 
         /* TOAST NOTIFICHE */
         #toast-container { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 9999; }
@@ -173,16 +183,16 @@
 
                 <div style="margin-top: 55px; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 35px;">
                     <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted-dark); font-weight: 700; margin-bottom: 20px;">
-                        Funzionalità progettate per:
+                        Clicca sul tuo settore per scoprire di più:
                     </p>
                     <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
-                        <span class="target-badge">✂️ Parrucchieri & Saloni</span>
-                        <span class="target-badge">🏋️‍♂️ Personal Trainer</span>
-                        <span class="target-badge">👗 Negozi Abbigliamento</span>
-                        <span class="target-badge">⚕️ Studi Medici & Cliniche</span>
-                        <span class="target-badge">☕ Ristorazione & Asporto</span>
-                        <span class="target-badge">🛍️ Negozi al Dettaglio</span>
-                        <span class="target-badge" style="background: transparent; border: 1px dashed rgba(148, 163, 184, 0.5); opacity: 0.9;">➕ E molti altri...</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">✂️ Parrucchieri & Saloni</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">🏋️‍♂️ Personal Trainer</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">👗 Negozi Abbigliamento</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">⚕️ Studi Medici & Cliniche</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">☕ Ristorazione & Asporto</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))">🛍️ Negozi al Dettaglio</span>
+                        <span class="target-badge" onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))" style="background: transparent; border: 1px dashed rgba(148, 163, 184, 0.5); opacity: 0.9;">➕ E molti altri...</span>
                     </div>
                 </div>
             </div>
@@ -221,13 +231,11 @@
                 <div class="pricing-card">
                     <div class="p-tier">Starter Vetrina</div>
                     <div class="p-desc">Per chi vuole presentare il proprio business con una Web App installabile.</div>
-                    
                     <div class="p-price">
                         <div class="p-strike">350€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup">250€ <span>/ Setup unico</span></div>
                         <div class="p-monthly">+ 49€ / mese gestione</div>
                     </div>
-
                     <ul class="p-features"><li>Creazione Web App (PWA)</li><li>Sezioni Chi Sono / Servizi</li><li><b>Modulo Contatti base</b></li><li>Dashboard Admin essenziale</li><li>Dominio e Hosting inclusi</li></ul>
                     <button class="btn-pricing" onclick="preparaContatto('Starter')">Seleziona Starter</button>
                 </div>
@@ -236,13 +244,11 @@
                     <div class="badge-popular">Ideale per Professionisti</div>
                     <div class="p-tier" style="color: var(--primary);">Pro Booking</div>
                     <div class="p-desc">Calendario appuntamenti integrato per far prenotare i clienti in autonomia h24.</div>
-                    
                     <div class="p-price">
                         <div class="p-strike">500€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup" style="color: var(--primary);">350€ <span>/ Setup unico</span></div>
                         <div class="p-monthly" style="background: rgba(129, 140, 248, 0.1); border-color: rgba(129, 140, 248, 0.2); color: var(--primary-light);">+ 149€ / mese gestione</div>
                     </div>
-
                     <ul class="p-features"><li><b>Tutto il piano Starter</b></li><li><b>Calendario Appuntamenti</b></li><li>Gestione orari e slot</li><li>Pannello approvazione</li><li>Integrazione chat WhatsApp</li></ul>
                     <button class="btn-pricing filled" onclick="preparaContatto('Pro Booking')">Seleziona PRO</button>
                 </div>
@@ -250,18 +256,35 @@
                 <div class="pricing-card">
                     <div class="p-tier">VIP E-Commerce</div>
                     <div class="p-desc">Vendi i tuoi prodotti o accetta ordini di asporto direttamente dall'App.</div>
-                    
                     <div class="p-price">
                         <div class="p-strike">650€ <span class="p-strike-badge">SCONTO SETUP</span></div>
                         <div class="p-setup">450€ <span>/ Setup unico</span></div>
                         <div class="p-monthly">+ 299€ / mese gestione</div>
                     </div>
-
                     <ul class="p-features"><li><b>Tutto il piano Pro Booking</b></li><li><b>Catalogo prodotti dinamico</b></li><li><b>Carrello acquisti</b> in App</li><li>Ordini diretti su WA o Stripe</li><li>Zero commissioni vendite</li></ul>
                     <button class="btn-pricing" onclick="preparaContatto('VIP E-Commerce')">Seleziona VIP</button>
                 </div>
-
             </div>
+
+            <div class="info-card" style="margin-top: 40px; border-color: transparent;">
+                <h2 class="section-title" style="font-size: 22px; margin-bottom: 25px;">Domande Frequenti 💡</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-q"><span>📱</span> I miei clienti devono scaricare l'app dall'App Store?</div>
+                    <div class="faq-a">No! Sviluppiamo PWA (Progressive Web App). Il cliente clicca sul link nel tuo profilo Instagram e può aggiungere l'App direttamente alla schermata Home del suo telefono in 1 secondo. Zero spazio occupato, zero passaggi complessi.</div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-q"><span>💸</span> Prendi commissioni sulle mie prenotazioni/vendite?</div>
+                    <div class="faq-a">Assolutamente zero. Il nostro modello è limpido: paghi il costo di Setup iniziale per creare l'app e un canone mensile fisso per il mantenimento del server e la gestione. I tuoi guadagni restano tuoi al 100%.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-q"><span>🔒</span> Ci sono vincoli o contratti lunghi anni?</div>
+                    <div class="faq-a">No. Lavoriamo mese per mese. Se per qualsiasi motivo decidi di chiudere il servizio, basta una semplice comunicazione e sospendiamo il canone senza penali o costi nascosti.</div>
+                </div>
+            </div>
+
         </div>
 
         <div id="inizia-ora" class="section">
@@ -318,7 +341,10 @@
         <div id="admin" class="section">
             <div class="info-card" style="border-color: #EF4444; background: rgba(239, 68, 68, 0.05);">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(239, 68, 68, 0.2); margin-bottom: 20px; padding-bottom: 15px;">
-                    <h2 class="section-title" style="color: #EF4444; border: none; margin: 0; padding: 0;">🛡️ Area Admin</h2>
+                    <div>
+                        <h2 class="section-title" style="color: #EF4444; border: none; margin: 0; padding: 0;">🛡️ Area Admin</h2>
+                        <div id="admin-counter" style="font-size: 13px; color: var(--text-muted-dark); margin-top: 5px; font-weight: 600;">Calcolo richieste in corso...</div>
+                    </div>
                     <button onclick="caricaRichiesteAdmin()" style="background:transparent; border:none; font-size: 20px; cursor: pointer;" title="Aggiorna Dati">🔄</button>
                 </div>
                 
@@ -335,15 +361,21 @@
 
     </main>
 
+    <footer>
+        © <span id="year"></span> EC Web App. Progettato e Sviluppato a Mantova.
+    </footer>
+
     <div id="toast-container"></div>
 
     <script>
         // ==========================================
-        // 0. FUNZIONI EXTRA UI (Mese, Tel, Email)
+        // 0. FUNZIONI EXTRA UI (Mese, Tel, Email, Anno)
         // ==========================================
         const mesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         const meseCorrenteSpan = document.getElementById('current-month');
         if(meseCorrenteSpan) meseCorrenteSpan.innerText = mesi[new Date().getMonth()];
+
+        document.getElementById("year").innerText = new Date().getFullYear();
 
         const phoneInput = document.getElementById('con-tel');
         if(phoneInput) {
@@ -501,12 +533,21 @@
 
         window.caricaRichiesteAdmin = async function() {
             const container = document.getElementById('lista-richieste-admin');
+            const counterBox = document.getElementById('admin-counter');
             container.innerHTML = "<p style='color:var(--text-muted-dark); font-size:14px;'>Sincronizzazione DB in corso...</p>";
             
             const { data, error } = await clientSupabase.from('prenotazioni')
                                         .select('*').eq('stato', filtroAdminCorrente).order('created_at', { ascending: false });
             
-            if (error) { container.innerHTML = "<p style='color:#EF4444;'>Errore caricamento dati.</p>"; return; }
+            if (error) { 
+                container.innerHTML = "<p style='color:#EF4444;'>Errore caricamento dati.</p>"; 
+                counterBox.innerText = "Errore di connessione.";
+                return; 
+            }
+            
+            // Aggiorna contatore
+            counterBox.innerHTML = `Totale: <span style="color:var(--primary-light); font-weight:800;">${data.length}</span> ${filtroAdminCorrente === 'Nuova' ? 'Nuove Richieste' : 'Abbonamenti Attivi'}`;
+
             if (data.length === 0) { container.innerHTML = "<p style='color:var(--text-muted-dark); font-size:14px;'>Nessun dato presente in questa sezione.</p>"; return; }
 
             container.innerHTML = "";
