@@ -86,6 +86,9 @@
         .btn-submit { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: 700; width: 100%; transition: all 0.3s; box-shadow: 0 5px 15px var(--primary-glow); font-family: inherit;}
         .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); background-color: #6366F1; }
         .btn-submit:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        /* Rassicurazione Pagamento */
+        .trust-badge { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--accent); margin-top: 15px; font-weight: 600; }
 
         /* PACCHETTI E GRIGLIE RESPONSIVE FIXATE */
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; margin-top: 20px; align-items: stretch; }
@@ -137,7 +140,7 @@
         <button class="tab-link active" onclick="apriSezione('home', this)">Home</button>
         <button class="tab-link" onclick="apriSezione('il-problema', this)">Perché un'App?</button>
         <button class="tab-link" id="nav-btn-pacchetti" onclick="apriSezione('pacchetti', this)">Soluzioni</button>
-        <button class="tab-link" id="nav-btn-inizia" onclick="apriSezione('inizia-ora', this)" style="color: white; background: var(--accent); border-radius: 30px;">🚀 Inizia Ora</button>
+        <button class="tab-link" id="nav-btn-inizia" onclick="apriSezione('inizia-ora', this)" style="color: var(--bg-dark); background: var(--accent); border-radius: 30px; font-weight: 800; box-shadow: 0 0 15px var(--accent-glow);">🚀 Inizia Ora</button>
         <button id="btn-nav-admin" class="tab-link" style="display:none; color:#EF4444;" onclick="apriSezione('admin', this)">🛡️ Admin</button>
     </nav>
 
@@ -223,7 +226,10 @@
         <div id="inizia-ora" class="section">
             <div class="info-card" style="border-color: var(--border-glow); text-align: center;">
                 <h2 class="section-title">Parliamo del tuo Progetto.</h2>
-                <p style="font-size: 15px; color: var(--text-muted-dark); margin-bottom: 30px;">Compila il modulo, ti ricontatterò per capire esattamente di cosa hai bisogno.</p>
+                <p style="font-size: 15px; color: var(--text-muted-dark); margin-bottom: 30px;">
+                    Compila il modulo, ti ricontatterò per capire esattamente di cosa hai bisogno.
+                </p>
+                
                 <div style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
                     <div class="form-group">
                         <label>Servizio Software di Interesse</label>
@@ -235,21 +241,35 @@
                             <option value="Altro">Vorrei un software personalizzato / Info Generiche</option>
                         </select>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 15px; width: 100%;">
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0 15px; width: 100%;">
                         <div class="form-group">
-                            <label>Nome Attività (Es. Salone Rossi)</label>
-                            <input type="text" id="con-attivita" placeholder="Il nome del tuo business">
+                            <label>Il Tuo Nome e Cognome</label>
+                            <input type="text" id="con-nome" placeholder="Es. Marco Bianchi">
+                        </div>
+                        <div class="form-group">
+                            <label>Nome Attività</label>
+                            <input type="text" id="con-attivita" placeholder="Es. Salone Rossi / Studio Medico">
                         </div>
                         <div class="form-group">
                             <label>Cellulare / WhatsApp</label>
                             <input type="tel" id="con-tel" placeholder="Es. 340 1234567">
                         </div>
+                        <div class="form-group">
+                            <label>Email (Per sicurezza)</label>
+                            <input type="email" id="con-email" placeholder="Es. marco@email.it">
+                        </div>
                     </div>
+
                     <div class="form-group">
                         <label>Le tue esigenze (Opzionale ma utile)</label>
                         <textarea id="con-note" rows="3" placeholder="Es: Vorrei far prenotare tagli di capelli ai miei clienti..."></textarea>
                     </div>
-                    <button id="btn-invia" class="btn-submit" onclick="inviaRichiesta()">📩 Invia Richiesta</button>
+
+                    <button id="btn-invia" class="btn-submit" onclick="inviaRichiesta()">📩 Invia Richiesta (Senza Impegno)</button>
+                    <div class="trust-badge">
+                        🔒 Nessun pagamento richiesto in questa fase.
+                    </div>
                 </div>
             </div>
         </div>
@@ -284,7 +304,7 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZnZheGZ2c25zcGtmeGlzd2hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MzY2OTQsImV4cCI6MjA4OTMxMjY5NH0.QKrlFHzrMiVGTdMolTlVIUUZ2OB_yE_2lc2BM5YoxeE';
         const clientSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let filtroAdminCorrente = 'Nuova'; // Variabile globale per il tab admin selezionato
+        let filtroAdminCorrente = 'Nuova';
 
         // ==========================================
         // 2. NAVIGAZIONE E UI
@@ -326,7 +346,7 @@
         }
 
         // ==========================================
-        // 3. ACCESSO SEGRETO ADMIN (PASSWORD: boss)
+        // 3. ACCESSO SEGRETO ADMIN
         // ==========================================
         let adminClicks = 0; let adminTimer;
         window.clickSegreto = function() {
@@ -350,32 +370,44 @@
         // ==========================================
         window.inviaRichiesta = async function() {
             const pacchetto = document.getElementById('con-pacchetto').value;
+            const nomeCliente = document.getElementById('con-nome').value.trim();
             const attivita = document.getElementById('con-attivita').value.trim();
             const tel = document.getElementById('con-tel').value.trim();
+            const email = document.getElementById('con-email').value.trim();
             const note = document.getElementById('con-note').value.trim();
 
-            if(!pacchetto || !attivita || !tel) {
-                showToast("Compila Pacchetto, Nome Attività e Telefono.", true); return;
+            if(!pacchetto || !nomeCliente || !attivita || !tel) {
+                showToast("Compila i campi obbligatori (Pacchetto, Nome, Attività, Cellulare).", true); return;
             }
 
             const btn = document.getElementById('btn-invia');
             btn.disabled = true; btn.innerText = "Invio in corso...";
 
             const { error } = await clientSupabase.from('prenotazioni').insert([{
-                nome: attivita, telefono: tel, servizio: pacchetto, 
-                data_prenotazione: "Da concordare", ora_prenotazione: "Da concordare", note: note, stato: "Nuova"
+                nome: attivita, 
+                nome_cliente: nomeCliente,
+                email: email,
+                telefono: tel, 
+                servizio: pacchetto, 
+                data_prenotazione: "Da concordare", 
+                ora_prenotazione: "Da concordare", 
+                note: note, 
+                stato: "Nuova"
             }]);
 
             if (error) {
                 showToast("Errore di connessione al database.", true);
+                console.error(error);
             } else {
                 showToast("Richiesta inviata con successo!");
                 document.getElementById('con-pacchetto').value = '';
+                document.getElementById('con-nome').value = '';
                 document.getElementById('con-attivita').value = '';
                 document.getElementById('con-tel').value = '';
+                document.getElementById('con-email').value = '';
                 document.getElementById('con-note').value = '';
             }
-            btn.disabled = false; btn.innerText = "📩 Invia Richiesta";
+            btn.disabled = false; btn.innerText = "📩 Invia Richiesta (Senza Impegno)";
         };
 
         // ==========================================
@@ -406,7 +438,6 @@
             const container = document.getElementById('lista-richieste-admin');
             container.innerHTML = "<p style='color:var(--text-muted-dark); font-size:14px;'>Sincronizzazione DB in corso...</p>";
             
-            // Richiama solo le righe che corrispondono al tab selezionato (Nuova o Attivata)
             const { data, error } = await clientSupabase.from('prenotazioni')
                                         .select('*').eq('stato', filtroAdminCorrente).order('created_at', { ascending: false });
             
@@ -417,10 +448,14 @@
             data.forEach(p => {
                 let dataCreazione = new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
                 let telWA = p.telefono.replace(/\D/g, ''); if(telWA.startsWith('3')) telWA = '39' + telWA;
-                let msgWA = encodeURIComponent(`Ciao! Sono Emanuele di EC Web App. Ti scrivo in merito al tuo pacchetto "${p.servizio}". Come procediamo?`);
+                
+                // Nomi per i messaggi e l'interfaccia (con fallback se vuoti per vecchi dati)
+                let nomePersona = p.nome_cliente || "Cliente";
+                let emailPersona = p.email || "Non fornita";
+                
+                let msgWA = encodeURIComponent(`Ciao ${nomePersona}! Sono Emanuele di EC Web App. Ti scrivo in merito al pacchetto "${p.servizio}" per la tua attività (${p.nome}). Come posso aiutarti?`);
                 let noteHtml = p.note ? `<div style="font-size:12px; color:var(--text-muted-dark); margin-top:5px; background:rgba(0,0,0,0.2); padding:8px; border-radius:8px;"><b>Note:</b> ${p.note}</div>` : "";
 
-                // Generazione bottoni in base alla sezione
                 let bottoniAzione = "";
                 if(filtroAdminCorrente === 'Nuova') {
                     bottoniAzione = `<button onclick="cambiaStato(${p.id}, 'Attivata')" style="padding:8px 12px; font-size:12px; font-weight:700; border:none; border-radius:8px; background:var(--accent); color:var(--bg-dark); cursor:pointer;">✅ Attiva Abbonamento</button>`;
@@ -438,8 +473,8 @@
                 div.innerHTML = `
                     <div style="flex: 1; min-width: 200px;">
                         <b style="font-size:16px; color: var(--text-light);">${p.nome}</b> ${badgeHtml}<br>
-                        <span style="font-size: 13px; color: var(--primary);">Pacchetto: <b style="font-weight: 600;">${p.servizio}</b></span><br>
-                        <span style="font-size: 12px; color: var(--text-muted-dark);">Data: ${dataCreazione} | 📞 ${p.telefono}</span>
+                        <span style="font-size: 13px; color: var(--primary);">Referente: <b>${nomePersona}</b> | Pacchetto: <b style="font-weight: 600;">${p.servizio}</b></span><br>
+                        <span style="font-size: 12px; color: var(--text-muted-dark);">Data: ${dataCreazione} | 📞 ${p.telefono} | 📧 ${emailPersona}</span>
                         ${noteHtml}
                     </div>
                     <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:10px;">
