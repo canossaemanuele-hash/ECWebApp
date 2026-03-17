@@ -3,185 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EC Web App - Digital Partner Moderno</title>
+    <title>EC Web App - Sviluppo Software e PWA</title>
     
     <meta property="og:title" content="EC Web App - Digitalizza il tuo business locale">
-    <meta property="og:description" content="Sviluppo Web App su misura. Zero abbonamenti costosi, gestione WhatsApp.">
+    <meta property="og:description" content="Sviluppo Web App su misura. Zero abbonamenti costosi, gestione prenotazioni e WhatsApp.">
     <meta property="og:type" content="website">
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="EC Web App">
     <meta name="theme-color" content="#0F172A">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+        /* ==========================================
+           FIX MOBILE E RESET (Niente scroll orizzontale)
+           ========================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0; 
+            padding: 0;
+        }
+
         /* ==========================================
            VARIABILI E PALETTE DARK / COLORED
            ========================================== */
         :root {
-            /* Sfondi principali e card */
-            --bg-dark: #0F172A;       /* Blu/Slate Profondo (Main BG) */
+            --bg-dark: #0F172A;       
             --bg-body-gradient: linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%);
-            --bg-card: #1E293B;       /* Slate Slate slightly Lighter */
-            --border-glow: #312E81;   /* Viola scuro per bordi */
+            --bg-card: #1E293B;       
+            --border-glow: #312E81;   
             
-            /* Colori primari / Tech */
-            --primary: #818CF8;       /* Violetto Tech Luminoso */
+            --primary: #818CF8;       
             --primary-light: #C7D2FE;
             --primary-glow: rgba(129, 140, 248, 0.4);
             
-            /* Colori accento / Marketing */
-            --accent: #2DD4BF;        /* Ciano/Mint Luminoso (Successi/Fidelizzazione) */
+            --accent: #2DD4BF;        
             --accent-light: #99F6E4;
             --accent-glow: rgba(45, 212, 191, 0.3);
             
-            /* Testi */
-            --text-light: #F1F5F9;     /* Off white (Text Principale) */
-            --text-muted-dark: #94A3B8; /* Slate grigio (Text Secondario) */
+            --text-light: #F1F5F9;     
+            --text-muted-dark: #94A3B8; 
             
             --shadow-modern: 0 10px 40px rgba(0,0,0,0.2);
             --radius-lg: 24px;
             --radius-md: 16px;
         }
 
-        /* RESET E STILI BASE DARK */
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--bg-dark); 
             background-image: var(--bg-body-gradient);
             color: var(--text-light); 
-            margin: 0; padding: 0; 
             display: flex; flex-direction: column; align-items: center; 
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased; 
             position: relative;
         }
         
-        /* SFONDI DINAMICI (Moving Blobs) */
+        /* SFONDI DINAMICI */
         .bg-blob {
-            position: absolute; width: 400px; height: 400px; 
-            border-radius: 50%; opacity: 0.15; filter: blur(100px);
+            position: absolute; width: 400px; height: 400px; border-radius: 50%; opacity: 0.15; filter: blur(100px);
             z-index: -1; animation: blobMove 15s infinite alternate ease-in-out;
+            pointer-events: none; 
         }
         .bg-blob.violet { background: var(--primary); top: -100px; left: -150px; }
         .bg-blob.cyan { background: var(--accent); bottom: 100px; right: -150px; animation-delay: -5s;}
-        @keyframes blobMove { 
-            0% { transform: translate(0, 0); } 
-            100% { transform: translate(100px, 100px); } 
-        }
+        @keyframes blobMove { 0% { transform: translate(0, 0); } 100% { transform: translate(100px, 100px); } }
 
-        /* HEADER & LOGO GLOW */
-        header { 
-            background: transparent; width: 100%; text-align: center; 
-            padding: 3.5rem 0 4.5rem 0;
-            position: relative;
-        }
+        /* HEADER E NAVIGAZIONE */
+        header { background: transparent; width: 100%; text-align: center; padding: 3.5rem 0 4.5rem 0; position: relative; }
         h1 { margin: 0; font-weight: 500; font-size: 28px; color: var(--text-light); cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
         h1 strong { color: var(--text-light); font-weight: 900; letter-spacing: -1px; text-shadow: 0 0 15px var(--primary-glow); }
         h1 strong .e { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
         h1 strong .c { color: var(--accent); text-shadow: 0 0 15px var(--accent); }
 
-        /* NAVIGAZIONE GLASSmorphism DARK */
         nav { 
             display: flex; justify-content: center; gap: 4px; margin-top: -30px; 
             background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             padding: 8px; border-radius: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); 
-            flex-wrap: wrap; z-index: 100; border: 1px solid rgba(148, 163, 184, 0.2);
-            position: sticky; top: 15px;
+            flex-wrap: wrap; z-index: 100; border: 1px solid rgba(148, 163, 184, 0.2); position: sticky; top: 15px;
+            width: max-content; max-width: 95%; 
         }
-        nav button { 
-            background: transparent; border: none; padding: 12px 18px; border-radius: 30px; 
-            font-size: 14px; font-weight: 600; color: var(--text-muted-dark); cursor: pointer; 
-            transition: all 0.3s ease; font-family: inherit;
-        }
+        nav button { background: transparent; border: none; padding: 12px 18px; border-radius: 30px; font-size: 14px; font-weight: 600; color: var(--text-muted-dark); cursor: pointer; transition: all 0.3s ease; font-family: inherit; }
         nav button:hover { background: rgba(148, 163, 184, 0.1); color: var(--primary); }
         nav button.active { background: var(--primary); color: white; box-shadow: 0 5px 15px var(--primary-glow); }
-        @keyframes rotateRocket { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(15deg); } }
-        nav button#nav-prenota .rocket-nav { display: inline-block; animation: rotateRocket 4s infinite ease-in-out; }
 
         main { width: 95%; max-width: 1100px; margin: 50px auto; position: relative; z-index: 1; }
-
         .section { display: none; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
         .section.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Modern Cards - Glow on Hover */
-        .info-card { 
-            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            padding: 45px 35px; border-radius: var(--radius-lg); border: 1px solid rgba(148, 163, 184, 0.2); 
-            box-shadow: var(--shadow-modern); margin-bottom: 30px; transition: border-color 0.3s, box-shadow 0.3s;
-        }
+        /* CARDS */
+        .info-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 45px 30px; border-radius: var(--radius-lg); border: 1px solid rgba(148, 163, 184, 0.2); box-shadow: var(--shadow-modern); margin-bottom: 30px; transition: border-color 0.3s, box-shadow 0.3s; }
         .info-card:hover { border-color: var(--primary); box-shadow: 0 10px 40px var(--primary-glow); }
-        
         h2.section-title { color: var(--text-light); margin-top: 0; font-size: 28px; padding-bottom: 15px; margin-bottom: 10px; font-weight: 900; letter-spacing: -1px; text-shadow: 0 0 10px rgba(241, 245, 249, 0.1); }
         h2.section-title span { color: var(--primary); }
-        .section-subtitle { font-size: 16px; color: var(--text-muted-dark); margin-bottom: 35px; line-height: 1.5; font-weight: 400;}
+        
+        /* TARGET BADGES */
+        .target-badge { padding: 10px 18px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; font-size: 13px; font-weight: 600; color: var(--text-light); transition: all 0.3s; backdrop-filter: blur(5px); display: inline-flex; align-items: center; gap: 8px; cursor: default; }
+        .target-badge:hover { background: rgba(129, 140, 248, 0.15); border-color: var(--primary); color: var(--primary-light); transform: translateY(-3px); box-shadow: 0 5px 15px var(--primary-glow); }
 
-        /* Modern Inputs per Dark Mode */
-        .form-group { margin-bottom: 22px; text-align: left; }
+        /* FORM */
+        .form-group { margin-bottom: 22px; text-align: left; width: 100%; }
         .form-group label { font-size: 13px; color: var(--text-muted-dark); font-weight: 700; display: block; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;}
-        .form-group input, .form-group select, .form-group textarea { 
-            width: 100%; padding: 16px; 
-            border: 2px solid var(--bg-card); border-radius: 14px; 
-            font-family: inherit; font-size: 15px; box-sizing: border-box; 
-            background: var(--bg-card); color: var(--text-light); 
-            transition: all 0.3s ease; outline: none;
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px; border: 2px solid var(--bg-card); border-radius: 14px; font-family: inherit; font-size: 15px; background: var(--bg-card); color: var(--text-light); transition: all 0.3s ease; outline: none; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); background: #263145; box-shadow: 0 0 15px var(--primary-glow); }
         
-        /* Admin Rows Style */
-        .admin-row { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 20px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); 
-            border-radius: 14px; margin-bottom: 12px; gap: 15px; flex-wrap: wrap; transition: transform 0.2s;
-        }
-        .admin-row:hover { transform: scale(1.01); background: rgba(30, 41, 59, 0.8); }
-
-        /* Utility classes */
         .btn-submit { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: 700; width: 100%; transition: all 0.3s; box-shadow: 0 5px 15px var(--primary-glow); font-family: inherit;}
         .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); background-color: #6366F1; }
-        .badge-wa { color: var(--accent) !important; text-shadow: 0 0 10px var(--accent) !important; }
+        .btn-submit:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* ==========================================
-           GRIGLIA PACCHETTI (DARK MODERN UI)
-           ========================================== */
-        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 20px; align-items: stretch; }
-        
-        .pricing-card { 
-            background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            border-radius: var(--radius-lg); padding: 35px 30px; display: flex; flex-direction: column; position: relative; 
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s; 
-        }
+        /* PACCHETTI E GRIGLIE RESPONSIVE FIXATE */
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; margin-top: 20px; align-items: stretch; }
+        .pricing-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: var(--radius-lg); padding: 35px 25px; display: flex; flex-direction: column; position: relative; transition: transform 0.4s, border-color 0.3s; }
         .pricing-card:hover { transform: scale(1.02); border-color: rgba(241, 245, 249, 0.2); box-shadow: var(--shadow-modern); }
-        
-        /* Stile PRO (In Evidenza - Glowing) */
-        .pricing-card.popular { border: 2px solid var(--primary); box-shadow: 0 15px 40px var(--primary-glow); }
-        
-        .badge-popular { 
-            position: absolute; top: -14px; left: 50%; transform: translateX(-50%); 
-            background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; 
-            font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 0 15px var(--primary-glow);
-        }
-
+        .pricing-card.popular { border: 2px solid var(--primary); box-shadow: 0 15px 40px var(--primary-glow); z-index: 10; }
+        .badge-popular { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; box-shadow: 0 0 15px var(--primary-glow); width: max-content;}
         .p-tier { font-size: 22px; font-weight: 800; color: var(--text-light); margin-bottom: 8px; }
         .p-desc { font-size: 14px; color: var(--text-muted-dark); margin-bottom: 30px; min-height: 40px; line-height: 1.5; font-weight: 400;}
-        
         .p-price { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); }
-        .p-setup { font-size: 36px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; text-shadow: 0 0 15px rgba(241, 245, 249, 0.15); }
-        .p-setup span { font-size: 15px; color: var(--text-muted-dark); font-weight: 500; letter-spacing: normal; }
-        .p-monthly { font-size: 18px; color: var(--accent); font-weight: 700; margin-top: 10px; display: flex; align-items: center; gap: 8px; text-shadow: 0 0 10px var(--accent-glow); }
-
+        .p-setup { font-size: 32px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; }
+        .p-setup span { font-size: 15px; color: var(--text-muted-dark); font-weight: 500; }
+        .p-monthly { font-size: 15px; color: var(--accent); font-weight: 700; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
         .p-features { list-style: none; padding: 0; margin: 0 0 35px 0; flex-grow: 1; }
-        .p-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 15px; color: var(--text-light); margin-bottom: 16px; line-height: 1.4; font-weight: 500;}
+        .p-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-light); margin-bottom: 16px; font-weight: 500; line-height: 1.4;}
         .p-features li b { color: var(--primary-light); font-weight: 600; }
-        .p-features li::before { content: '✓'; color: var(--accent); font-weight: 900; font-size: 16px; text-shadow: 0 0 8px var(--accent); }
-        
+        .p-features li::before { content: '✓'; color: var(--accent); font-weight: 900; }
         .btn-pricing { width: 100%; padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; transition: 0.3s; text-align: center; border: 2px solid rgba(148, 163, 184, 0.2); background: transparent; color: var(--text-light); font-family: inherit;}
         .btn-pricing.filled { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
-        .btn-pricing:hover { background: rgba(148, 163, 184, 0.1); border-color: rgba(148, 163, 184, 0.2); }
-        .btn-pricing.filled:hover { background: #6366F1; border-color: #6366F1; box-shadow: 0 0 25px var(--primary); }
+        .btn-pricing:hover { background: rgba(148, 163, 184, 0.1); }
+        .btn-pricing.filled:hover { background: #6366F1; }
+
+        .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 14px; margin-bottom: 12px; gap: 15px; flex-wrap: wrap; transition: transform 0.2s; }
+        .admin-row:hover { transform: scale(1.01); background: rgba(30, 41, 59, 0.8); }
+
+        /* TOAST NOTIFICHE */
+        #toast-container { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 15px; z-index: 9999; }
+        .toast { background: var(--bg-card); border-left: 4px solid var(--accent); padding: 16px 22px; border-radius: 12px; box-shadow: var(--shadow-modern); animation: slideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; max-width: 320px; font-size: 14px; font-weight: 500; color: var(--text-light); border: 1px solid rgba(148,163,184,0.2); border-left: 4px solid var(--accent); display: flex; align-items: center; gap: 12px; }
+        .toast.error { border-left-color: #EF4444; }
+        @keyframes slideInRight { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(10px); } }
     </style>
 </head>
 <body>
@@ -191,47 +160,47 @@
 
     <header>
         <h1 onclick="clickSegreto()"><span class="e">EC</span> <strong>Web App</strong></h1>
-        <p style="margin: 5px 0 0 0; color: var(--text-muted-dark); font-size: 15px; font-weight: 500;">Digital Partner per il Business Locale</p>
+        <p style="margin: 5px 0 0 0; color: var(--text-muted-dark); font-size: 15px; font-weight: 500;">Soluzioni Software per il Business Locale</p>
     </header>
 
     <nav id="main-nav">
         <button class="tab-link active" onclick="apriSezione('home', this)">Home</button>
         <button class="tab-link" onclick="apriSezione('il-problema', this)">Perché un'App?</button>
-        <button class="tab-link" id="nav-btn-pacchetti" onclick="apriSezione('pacchetti', this)">Pacchetti</button>
-        <button class="tab-link" id="nav-btn-inizia" onclick="apriSezione('inizia-ora', this)" style="color: white; background: var(--accent); border-radius: 30px; box-shadow: 0 0 15px var(--accent-glow);">
-            <span class="rocket-nav">🚀</span> Inizia Ora
-        </button>
-        
-        <button id="btn-nav-admin" class="tab-link" style="display:none; color:#EF4444; border: 1px dashed rgba(239, 68, 68, 0.4);" onclick="apriSezione('admin', this)">🛡️ Admin EC</button>
+        <button class="tab-link" id="nav-btn-pacchetti" onclick="apriSezione('pacchetti', this)">Soluzioni</button>
+        <button class="tab-link" id="nav-btn-inizia" onclick="apriSezione('inizia-ora', this)" style="color: white; background: var(--accent); border-radius: 30px;">🚀 Inizia Ora</button>
+        <button id="btn-nav-admin" class="tab-link" style="display:none; color:#EF4444;" onclick="apriSezione('admin', this)">🛡️ Admin</button>
     </nav>
 
     <main>
         
         <div id="home" class="section active">
-            <div style="background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 60px 30px; border-radius: var(--radius-lg); box-shadow: var(--shadow-modern); text-align: center; border: 1px solid rgba(148, 163, 184, 0.1); margin-bottom: 30px;">
+            <div style="background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 50px 25px; border-radius: var(--radius-lg); box-shadow: var(--shadow-modern); text-align: center; border: 1px solid rgba(148, 163, 184, 0.1); margin-bottom: 30px;">
                 
-                <div style="display: inline-block; background: var(--primary-glow); border: 1px solid rgba(129, 140, 248, 0.3); color: var(--primary-light); font-size: 13px; font-weight: 800; padding: 7px 15px; border-radius: 20px; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px var(--primary);">
-                    Sviluppo Web & PWA
-                </div>
-                
-                <h2 style="font-size: 38px; font-weight: 900; color: var(--text-light); margin: 0 0 20px 0; line-height: 1.1; letter-spacing: -1.5px; text-shadow: 0 0 20px rgba(241, 245, 249, 0.15);">
+                <h2 style="font-size: 34px; font-weight: 900; color: var(--text-light); margin: 0 0 20px 0; line-height: 1.2; letter-spacing: -1px;">
                     Digitalizza la tua attività.<br>
-                    <span style="color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">Senza abbonamenti costosi.</span>
+                    <span style="color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">Scala le tue prenotazioni.</span>
                 </h2>
                 
-                <p style="font-size: 17px; color: var(--text-muted-dark); line-height: 1.6; margin-bottom: 40px; max-width: 550px; margin-left: auto; margin-right: auto; font-weight: 400;">
-                    Trasformo il tuo business locale con una Web App su misura. Ricevi prenotazioni, gestisci i clienti via WhatsApp e dimentica per sempre le agende cartacee.
+                <p style="font-size: 16px; color: var(--text-muted-dark); line-height: 1.6; margin-bottom: 40px; max-width: 550px; margin-left: auto; margin-right: auto;">
+                    Trasformo il tuo business con Web App su misura. Ricevi appuntamenti, vendi online e gestisci i clienti via WhatsApp, dimenticando i software in abbonamento e le agende cartacee.
                 </p>
                 
-                <button onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))" style="background: var(--primary); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 25px var(--primary); font-family: inherit;">
-                    Vedi Pacchetti e Prezzi
+                <button onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))" style="background: var(--primary); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 25px var(--primary); font-family: inherit;">
+                    Esplora le Soluzioni Software
                 </button>
 
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-top: 50px;">
-                    <span style="padding: 11px 20px; rgba(30, 41, 59, 0.5); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 30px; font-size: 14px; font-weight: 600; color: var(--text-light); display: inline-flex; align-items: center; gap: 8px;">📱 App Installabile</span>
-                    <span style="padding: 11px 20px; background: rgba(45, 212, 191, 0.15); border: 1px solid rgba(45, 212, 191, 0.2); border-radius: 30px; font-size: 14px; font-weight: 700; color: var(--accent); display: inline-flex; align-items: center; gap: 8px; text-shadow: 0 0 8px var(--accent-glow);">🚀 Zero Costi Fissi</span>
-                    <span style="padding: 11px 20px; rgba(30, 41, 59, 0.5); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 30px; font-size: 14px; font-weight: 600; color: var(--text-light); display: inline-flex; align-items: center; gap: 8px;">💬 Gestione WhatsApp</span>
-                    <span style="padding: 11px 20px; rgba(30, 41, 59, 0.5); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 30px; font-size: 14px; font-weight: 600; color: var(--text-light); display: inline-flex; align-items: center; gap: 8px;">⚡ 100% Personale</span>
+                <div style="margin-top: 55px; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 35px;">
+                    <p style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted-dark); font-weight: 700; margin-bottom: 20px;">
+                        Funzionalità progettate per:
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;">
+                        <span class="target-badge">✂️ Parrucchieri & Saloni</span>
+                        <span class="target-badge">🏋️‍♂️ Personal Trainer</span>
+                        <span class="target-badge">👗 Negozi Abbigliamento</span>
+                        <span class="target-badge">⚕️ Studi Medici & Cliniche</span>
+                        <span class="target-badge">☕ Ristorazione & Asporto</span>
+                        <span class="target-badge">🛍️ Negozi al Dettaglio</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -239,92 +208,77 @@
         <div id="il-problema" class="section">
             <div class="info-card">
                 <h2 class="section-title">Perché passare a un'<span>App</span>?</h2>
-                <p class="section-subtitle">Dimentica le agende cartacee caotiche o i software caotici ad abbonamento.</p>
+                <p style="font-size: 16px; color: var(--text-muted-dark); margin-bottom: 35px;">Il mondo è su smartphone. Il tuo business dovrebbe esserlo.</p>
                 
                 <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 22px; background: rgba(239, 68, 68, 0.1); border-left: 4px solid #EF4444; padding: 25px; border-radius: var(--radius-md);">
-                        <div style="font-size: 18px; color: #EF4444; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 8px rgba(239, 68, 68, 0.3);">🛑 Il costo dei vecchi metodi</div>
-                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">L'agenda di carta non invia promemoria (causando appuntamenti saltati). I grandi portali web, invece, ti chiedono abbonamenti mensili altissimi e trattengono commissioni sui tuoi clienti.</div>
+                    <li style="margin-bottom: 20px; background: rgba(239, 68, 68, 0.1); border-left: 4px solid #EF4444; padding: 25px; border-radius: var(--radius-md);">
+                        <div style="font-size: 18px; color: #EF4444; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">🛑 Limiti dei vecchi metodi</div>
+                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">Le agende di carta fanno perdere appuntamenti per dimenticanza. I portali di prenotazione o e-commerce di terzi, invece, ti rubano percentuali altissime e trattengono i dati dei TUOI clienti.</div>
                     </li>
-                    <li style="margin-bottom: 22px; background: rgba(129, 140, 248, 0.1); border-left: 4px solid var(--primary); padding: 25px; border-radius: var(--radius-md);">
-                        <div style="font-size: 18px; color: var(--primary); font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 8px var(--primary-glow);">💡 La tua App, le tue regole</div>
-                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">Sviluppo una Web App (PWA) salvabile sulla Home del telefono. <b>Nessun costo fisso per il software</b>. L'infrastruttura è tua. Paghi solo il mio lavoro e i costi vivi del server (azzerabili con piani free).</div>
+                    <li style="margin-bottom: 20px; background: rgba(129, 140, 248, 0.1); border-left: 4px solid var(--primary); padding: 25px; border-radius: var(--radius-md);">
+                        <div style="font-size: 18px; color: var(--primary); font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">💡 Software di tua proprietà</div>
+                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">Sviluppo una PWA che i tuoi clienti installano sul telefono senza passare dagli Store. Calendari, carrelli e contatti sono integrati direttamente nel tuo sistema.</div>
                     </li>
                     <li style="margin-bottom: 10px; background: rgba(45, 212, 191, 0.1); border-left: 4px solid var(--accent); padding: 25px; border-radius: var(--radius-md);">
-                        <div style="font-size: 18px; color: var(--accent); font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; text-shadow: 0 0 10px var(--accent-glow);">💬 Il potere di WhatsApp</div>
-                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">Avrai un'area privata (Dashboard Admin) da cui gestire i contatti. Ricevi una richiesta? Ti basta un click per rispondere direttamente al cliente su WhatsApp, fidelizzandolo all'istante.</div>
+                        <div style="font-size: 18px; color: var(--accent); font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 10px;">💬 Gestione Smart (Dashboard)</div>
+                        <div style="font-size: 14px; color: var(--text-light); line-height: 1.6; font-weight: 500;">Ricevi una prenotazione o un ordine? La tua Dashboard segreta ti notifica tutto. Con un solo tap confermi e invii un messaggio WhatsApp automatico al cliente. Zero sforzo, conversione massima.</div>
                     </li>
                 </ul>
             </div>
         </div>
 
         <div id="pacchetti" class="section">
-            <div style="text-align: center; margin-bottom: 50px;">
-                <h2 style="color: var(--text-light); font-size: 32px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: -1.5px; text-shadow: 0 0 15px rgba(241, 245, 249, 0.1);">Piani chiari, nessun costo nascosto.</h2>
-                <p style="color: var(--text-muted-dark); font-size: 16px; max-width: 650px; margin: 0 auto; line-height: 1.6; font-weight: 400;">
-                    Paga il setup una volta sola per la tua Web App su misura, e scegli il livello di gestione mensile. Sfrutta infrastrutture gratuite (come GitHub/Supabase) per annullare i costi vivi.
-                </p>
-            </div>
-
             <div class="pricing-grid">
-                
                 <div class="pricing-card">
-                    <div class="p-tier">Starter</div>
-                    <div class="p-desc">Per chi vuole digitalizzarsi e gestire i clienti in modo professionale.</div>
-                    
+                    <div class="p-tier">Starter Vetrina</div>
+                    <div class="p-desc">Per chi vuole presentare il proprio business con una Web App installabile.</div>
                     <div class="p-price">
-                        <div class="p-setup">250€ <span class="wa-badge">/ Unico</span></div>
-                        <div class="p-monthly">+ 49€ / mese per gestione</div>
+                        <div class="p-setup">250€ <span>/ Setup unico</span></div>
+                        <div class="p-monthly">+ 49€ / mese manutenzione app</div>
                     </div>
-                    
                     <ul class="p-features">
-                        <li>Creazione Web App Personalizzata</li>
-                        <li>Salvabile sulla Home (PWA)</li>
-                        <li><b>Dashboard Admin</b> per i contatti</li>
+                        <li>Creazione Web App (PWA)</li>
+                        <li>Sezioni Chi Sono / Servizi</li>
+                        <li><b>Modulo Contatti base</b></li>
+                        <li>Dashboard Admin essenziale</li>
                         <li>Dominio e Hosting inclusi</li>
-                        <li>Assistenza tecnica tecnica standard</li>
                     </ul>
-                    
                     <button class="btn-pricing" onclick="preparaContatto('Starter')">Seleziona Starter</button>
                 </div>
 
                 <div class="pricing-card popular">
-                    <div class="badge-popular">Il Più Scelto</div>
-                    <div class="p-tier" style="color: var(--primary);">Pro Growth</div>
-                    <div class="p-desc">L'infrastruttura web unita a una spinta estetica per i tuoi social.</div>
-                    
+                    <div class="badge-popular">Ideale per Professionisti</div>
+                    <div class="p-tier" style="color: var(--primary);">Pro Booking</div>
+                    <div class="p-desc">Calendario appuntamenti integrato per far prenotare i clienti in autonomia h24.</div>
                     <div class="p-price">
-                        <div class="p-setup" style="color: var(--primary);">350€ <span>/ Unico</span></div>
-                        <div class="p-monthly" style="color: var(--primary); text-shadow: none;">+ 149€ / mese per gestione</div>
+                        <div class="p-setup" style="color: var(--primary);">350€ <span>/ Setup unico</span></div>
+                        <div class="p-monthly" style="color: var(--primary);">+ 149€ / mese gestione software</div>
                     </div>
-                    
                     <ul class="p-features">
-                        <li><b>Tutto il pacchetto Starter</b></li>
-                        <li><b>1 Shooting fotografico iniziale</b> in negozio</li>
-                        <li><b>2 Post / Reel al mese</b> per i social</li>
-                        <li>Supporto WhatsApp avanzato</li>
+                        <li><b>Tutto il piano Starter</b></li>
+                        <li><b>Calendario Appuntamenti</b> integrato</li>
+                        <li>Gestione orari e slot personalizzati</li>
+                        <li>Pannello approvazione appuntamenti</li>
+                        <li>Integrazione chat WhatsApp</li>
                     </ul>
-                    
-                    <button class="btn-pricing filled" onclick="preparaContatto('Pro Growth')">Seleziona PRO</button>
+                    <button class="btn-pricing filled" onclick="preparaContatto('Pro Booking')">Seleziona PRO</button>
                 </div>
 
                 <div class="pricing-card">
-                    <div class="p-tier">VIP All-In</div>
-                    <div class="p-desc">Delega completamente a me la presenza digitale della tua attività.</div>
-                    
+                    <div class="p-tier">VIP E-Commerce</div>
+                    <div class="p-desc">Vendi i tuoi prodotti o accetta ordini di asporto direttamente dall'App.</div>
                     <div class="p-price">
-                        <div class="p-setup">450€ <span>/ Unico</span></div>
-                        <div class="p-monthly">+ 299€ / mese per gestione</div>
+                        <div class="p-setup">450€ <span>/ Setup unico</span></div>
+                        <div class="p-monthly">+ 299€ / mese gestione software</div>
                     </div>
-                    
                     <ul class="p-features">
-                        <li><b>Tutto il pacchetto Pro Growth</b></li>
-                        <li><b>Shooting fotografico mensile</b></li>
-                        <li><b>8 Post / Reel al mese</b> (2/settimana)</li>
-                        <li>Piano editoriale strategico</li>
+                        <li><b>Tutto il piano Pro Booking</b></li>
+                        <li><b>Catalogo prodotti dinamico</b></li>
+                        <li><b>Carrello acquisti</b> in App</li>
+                        <li>Inoltro ordini diretti su WA o Stripe</li>
+                        <li>Zero commissioni sulle tue vendite</li>
                     </ul>
-                    
-                    <button class="btn-pricing" onclick="preparaContatto('VIP All-In')">Seleziona VIP</button>
+                    <button class="btn-pricing" onclick="preparaContatto('VIP E-Commerce')">Seleziona VIP</button>
                 </div>
             </div>
         </div>
@@ -332,25 +286,24 @@
         <div id="inizia-ora" class="section">
             <div class="info-card" style="border-color: var(--border-glow); text-align: center;">
                 <h2 class="section-title">Parliamo del tuo Progetto.</h2>
-                <p class="section-subtitle" style="max-width: 500px; margin-left: auto; margin-right: auto;">Compila il modulo qui sotto o contattami direttamente su WhatsApp. Ti ricontatterò entro 24 ore per pianificare insieme il setup della tua Web App.</p>
+                <p style="font-size: 15px; color: var(--text-muted-dark); margin-bottom: 30px;">Compila il modulo, ti ricontatterò per capire esattamente di cosa hai bisogno.</p>
                 
-                <div id="contatto-form-wrapper" style="max-width: 600px; margin: 0 auto;">
-                    
+                <div style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; align-items: center;">
                     <div class="form-group">
-                        <label>Il tuo Pacchetto di Interesse</label>
+                        <label>Servizio Software di Interesse</label>
                         <select id="con-pacchetto">
                             <option value="">Seleziona un'opzione...</option>
-                            <option value="Starter">Starter (250€ + 49€/mese)</option>
-                            <option value="Pro Growth">Pro Growth (350€ + 149€/mese)</option>
-                            <option value="VIP All-In">VIP All-In (450€ + 299€/mese)</option>
-                            <option value="Solo InfoGeneriche">Vorrei Info Generiche</option>
+                            <option value="Starter">Starter Vetrina (250€ + 49€/m)</option>
+                            <option value="Pro Booking">Pro Booking (Appuntamenti) (350€ + 149€/m)</option>
+                            <option value="VIP E-Commerce">VIP E-Commerce (Vendita) (450€ + 299€/m)</option>
+                            <option value="Altro">Vorrei un software personalizzato / Info Generiche</option>
                         </select>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 15px; width: 100%;">
                         <div class="form-group">
-                            <label>Nome Attività (o Professione)</label>
-                            <input type="text" id="con-attività" placeholder="Es. Studio Medico Rossi / Bar Moderno">
+                            <label>Nome Attività (Es. Salone Rossi)</label>
+                            <input type="text" id="con-attivita" placeholder="Il nome del tuo business">
                         </div>
                         <div class="form-group">
                             <label>Cellulare / WhatsApp</label>
@@ -359,103 +312,172 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Descrivi brevemente cosa ti serve (Opzionale)</label>
-                        <textarea id="con-note" rows="4" placeholder="Scrivi qui gli obiettivi o domande..."></textarea>
+                        <label>Le tue esigenze (Opzionale ma utile)</label>
+                        <textarea id="con-note" rows="3" placeholder="Es: Vorrei far prenotare tagli di capelli ai miei clienti..."></textarea>
                     </div>
 
-                    <button class="btn-submit" onclick="simulaInviaContatto()">📩 Invia Richiesta e Iniziamo</button>
-                    
-                    <p style="font-size: 13px; color: var(--text-muted-dark); margin-top: 25px; font-weight: 500;">Oppure scrivimi subito: <a href="https://wa.me/3912345678" target="_blank" class="badge-wa" style="text-decoration: underline; font-weight: 600;">💬 WhatsApp Emanuele (EC)</a></p>
+                    <button id="btn-invia" class="btn-submit" onclick="inviaRichiesta()">📩 Invia Richiesta</button>
                 </div>
             </div>
         </div>
 
         <div id="admin" class="section">
             <div class="info-card" style="border-color: #EF4444; background: rgba(239, 68, 68, 0.05);">
-                <h2 class="section-title" style="color: #EF4444; border-bottom-color: rgba(239, 68, 68, 0.2);"><b class="badge-wa">🛡️</b> Dashboard Admin EC Web App</h2>
-                <p class="section-subtitle">Layout di esempio della tua Dashboard Admin. Qui vedrai le richieste dei tuoi clienti locali e potrai contattarli.</p>
+                <h2 class="section-title" style="color: #EF4444; border-bottom: 1px solid rgba(239, 68, 68, 0.2);">🛡️ Dashboard Admin</h2>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 25px;">
-                    <button class="tab-link active" style="padding: 10px 18px; font-size: 13px;">Nuove Richieste</button>
-                    <button class="tab-link" style="padding: 10px 18px; font-size: 13px; background:transparent;">Storico Gestite</button>
+                    <button class="tab-link active" onclick="caricaRichiesteAdmin()" style="padding: 8px 16px; font-size: 13px; background:var(--bg-card); border:1px solid var(--border-glow); color:white; border-radius:10px; cursor:pointer;">🔄 Aggiorna Lista</button>
                 </div>
 
                 <div id="lista-richieste-admin">
-                    <div class="admin-row">
-                        <div style="flex: 1;">
-                            <b style="font-size:16px; color: var(--text-light);">Bar Moderno</b>
-                            <span style="font-size: 11px; background: rgba(239, 68, 68, 0.15); color: #EF4444; padding: 4px 10px; border-radius: 12px; margin-left: 8px; font-weight: 700; text-transform: uppercase;">Nuova</span><br>
-                            <span style="font-size: 13px; color: var(--primary);">Interesse: <b style="font-weight: 600;">Pro Growth</b></span><br>
-                            <span style="font-size: 12px; color: var(--text-muted-dark); font-weight:500;">Inviata: 12 Mag, 10:30 | 📞 340 1234567</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <a href="#" class="btn-submit" style="font-size: 12px; padding: 10px 18px; width:auto; background-color:rgba(129, 140, 248, 0.1); border: 1px solid var(--primary); color: var(--primary); box-shadow:none;">💬 Scrivi WA</a>
-                            <button class="btn-submit" style="font-size: 12px; padding: 10px 18px; width:auto; background: var(--border-glow); box-shadow:none; color: var(--primary-light);">Gestisci</button>
-                        </div>
-                    </div>
+                    <p style="color:var(--text-muted-dark); font-size:14px;">Caricamento in corso...</p>
                 </div>
             </div>
         </div>
 
     </main>
 
+    <div id="toast-container"></div>
+
     <script>
-        // Logica base di navigazione SPA
+        // ==========================================
+        // 1. CONFIGURAZIONE SUPABASE
+        // DA CAMBIARE CON LE TUE NUOVE CHIAVI PRIMA DI ANDARE ONLINE
+        // ==========================================
+        const SUPABASE_URL = 'https://zwubscpykgprkrnwukdc.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dWJzY3B5a2dwcmtybnd1a2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3OTEzODIsImV4cCI6MjA4ODM2NzM4Mn0.4zsMugqI-kveF7eMqLVgbLhGe-tLOlhqWfR2dtYQipU';
+        
+        const clientSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // ==========================================
+        // 2. NAVIGAZIONE E UI
+        // ==========================================
         window.apriSezione = function(id, el, bloccaScroll = false) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('#main-nav .tab-link').forEach(b => b.classList.remove('active'));
-            
-            const targetSection = document.getElementById(id);
-            if(targetSection) targetSection.classList.add('active');
+            document.getElementById(id).classList.add('active');
             if (el) el.classList.add('active');
+            if(!bloccaScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            if(!bloccaScroll) {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            if(id === 'admin') caricaRichiesteAdmin();
         };
 
-        // Prepara il modulo di contatto preselezionando il pacchetto
         window.preparaContatto = function(nomePacchetto) {
-            const tabInizia = document.getElementById('nav-btn-inizia');
-            apriSezione('inizia-ora', tabInizia);
-            
-            const selectPacchetto = document.getElementById('con-pacchetto');
-            if(selectPacchetto) {
-                selectPacchetto.value = nomePacchetto;
-                // Effetto bagliore per indicare la preseleziona
-                selectPacchetto.style.borderColor = "var(--primary)";
-                selectPacchetto.style.boxShadow = "0 0 15px var(--primary-glow)";
-                setTimeout(() => { selectPacchetto.style.borderColor = "var(--bg-card)"; selectPacchetto.style.boxShadow = "none"; }, 2000);
+            apriSezione('inizia-ora', document.getElementById('nav-btn-inizia'));
+            const select = document.getElementById('con-pacchetto');
+            if(select) {
+                // Pre-selezioniamo l'opzione corretta in base al testo cliccato
+                if(nomePacchetto.includes('Starter')) select.selectedIndex = 1;
+                else if(nomePacchetto.includes('Pro')) select.selectedIndex = 2;
+                else if(nomePacchetto.includes('VIP')) select.selectedIndex = 3;
+                
+                select.style.borderColor = "var(--primary)";
+                select.style.boxShadow = "0 0 15px var(--primary-glow)";
+                setTimeout(() => { select.style.borderColor = "var(--bg-card)"; select.style.boxShadow = "none"; }, 2000);
             }
         };
 
-        // Simulazione Invia Contatto (per ora solo Backend)
-        window.simulaInviaContatto = function() {
-            const pacchetto = document.getElementById('con-pacchetto').value;
-            const attivita = document.getElementById('con-attività').value.trim();
-            const tel = document.getElementById('con-tel').value.trim();
-            
-            if(!pacchetto || !attivita || !tel) {
-                alert("🛑 Compila tutti i campi obbligatori:\nPacchetto, Attività e Cellulare.");
-                return;
-            }
-            alert("✅ Richiesta di simulazione!\nHai inviato:\nPacchetto: " + pacchetto + "\nAttività: " + attivita + "\nTel: " + tel + "\n\nNel prossimo step collegheremo il database Supabase per salvare questa richiesta!");
-        };
+        window.showToast = function(message, isError = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${isError ? 'error' : ''}`;
+            toast.innerHTML = `<span>${isError ? '❌' : '✅'}</span> <div>${message}</div>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.4s ease forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+        }
 
-        // Click segreto sull'header EC Web App (3 click = sblocca Admin segreta)
         let adminClicks = 0; let adminTimer;
         window.clickSegreto = function() {
             adminClicks++; clearTimeout(adminTimer);
             adminTimer = setTimeout(() => { adminClicks = 0; }, 1000); 
             if (adminClicks === 3) {
-                const btnAdmin = document.getElementById('btn-nav-admin');
-                btnAdmin.style.display = 'inline-block';
-                apriSezione('admin', btnAdmin);
+                document.getElementById('btn-nav-admin').style.display = 'inline-block';
+                apriSezione('admin', document.getElementById('btn-nav-admin'));
                 adminClicks = 0;
-                // Piccola notifica segreta
-                alert("🔐 Accesso Area Admin EC Web App sbloccato!");
+                showToast("Area Admin sbloccata!");
             }
         };
+
+        // ==========================================
+        // 3. LOGICA DATABASE SUPABASE
+        // ==========================================
+        window.inviaRichiesta = async function() {
+            const pacchetto = document.getElementById('con-pacchetto').value;
+            const attivita = document.getElementById('con-attivita').value.trim();
+            const tel = document.getElementById('con-tel').value.trim();
+            const note = document.getElementById('con-note').value.trim();
+
+            if(!pacchetto || !attivita || !tel) {
+                showToast("Compila Pacchetto, Nome Attività e Telefono.", true); return;
+            }
+
+            const btn = document.getElementById('btn-invia');
+            btn.disabled = true; btn.innerText = "Invio in corso...";
+
+            const { error } = await clientSupabase.from('prenotazioni').insert([{
+                nome: attivita, 
+                telefono: tel, 
+                servizio: pacchetto, 
+                data_prenotazione: "Da concordare", 
+                ora_prenotazione: "Da concordare", 
+                note: note
+            }]);
+
+            if (error) {
+                showToast("Errore di connessione. Riprova più tardi.", true);
+            } else {
+                showToast("Richiesta inviata con successo!");
+                document.getElementById('con-pacchetto').value = '';
+                document.getElementById('con-attivita').value = '';
+                document.getElementById('con-tel').value = '';
+                document.getElementById('con-note').value = '';
+            }
+            btn.disabled = false; btn.innerText = "📩 Invia Richiesta";
+        };
+
+        window.caricaRichiesteAdmin = async function() {
+            const container = document.getElementById('lista-richieste-admin');
+            container.innerHTML = "<p style='color:var(--text-muted-dark); font-size:14px;'>Sincronizzazione DB in corso...</p>";
+            
+            const { data, error } = await clientSupabase.from('prenotazioni').select('*').order('created_at', { ascending: false });
+            
+            if (error) {
+                container.innerHTML = "<p style='color:#EF4444;'>Errore caricamento dati.</p>"; return;
+            }
+            
+            if (data.length === 0) {
+                container.innerHTML = "<p style='color:var(--text-muted-dark); font-size:14px;'>Nessuna richiesta ricevuta.</p>"; return;
+            }
+
+            container.innerHTML = "";
+            data.forEach(p => {
+                let dataCreazione = new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+                let telWA = p.telefono.replace(/\D/g, ''); if(telWA.startsWith('3')) telWA = '39' + telWA;
+                let msgWA = encodeURIComponent(`Ciao! Sono Emanuele di EC Web App. Ti scrivo in merito alla tua richiesta per il servizio "${p.servizio}". Come posso aiutarti a digitalizzare la tua attività?`);
+                
+                let noteHtml = p.note ? `<div style="font-size:12px; color:var(--text-muted-dark); margin-top:5px; background:rgba(0,0,0,0.2); padding:8px; border-radius:8px;"><b>Note:</b> ${p.note}</div>` : "";
+
+                let div = document.createElement('div');
+                div.className = "admin-row";
+                div.innerHTML = `
+                    <div style="flex: 1; min-width: 200px;">
+                        <b style="font-size:16px; color: var(--text-light);">${p.nome}</b><br>
+                        <span style="font-size: 13px; color: var(--primary);">Interesse: <b style="font-weight: 600;">${p.servizio}</b></span><br>
+                        <span style="font-size: 12px; color: var(--text-muted-dark);">Inviata: ${dataCreazione} | 📞 ${p.telefono}</span>
+                        ${noteHtml}
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; width:100%;">
+                        <a href="https://wa.me/${telWA}?text=${msgWA}" target="_blank" class="btn-submit" style="font-size: 12px; padding: 10px 18px; width:auto; text-decoration:none;">💬 Scrivi su WA</a>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        };
+        
+        window.onload = function() { caricaRichiesteAdmin(); };
     </script>
 </body>
 </html>
