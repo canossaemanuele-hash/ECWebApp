@@ -86,22 +86,24 @@
         .btn-submit { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 14px; cursor: pointer; font-size: 16px; font-weight: 700; width: 100%; transition: all 0.3s; box-shadow: 0 5px 15px var(--primary-glow); font-family: inherit;}
         .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 8px 25px var(--primary-glow); background-color: #6366F1; }
         .btn-submit:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
-        
-        /* Rassicurazione Pagamento */
         .trust-badge { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; color: var(--accent); margin-top: 15px; font-weight: 600; }
 
-        /* PACCHETTI E GRIGLIE RESPONSIVE FIXATE */
+        /* PACCHETTI E GRIGLIE (AGGIORNATE CON PREZZO BARRATO) */
         .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 30px; margin-top: 20px; align-items: stretch; }
         .pricing-card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.15); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: var(--radius-lg); padding: 35px 25px; display: flex; flex-direction: column; position: relative; transition: transform 0.4s, border-color 0.3s; }
         .pricing-card:hover { transform: scale(1.02); border-color: rgba(241, 245, 249, 0.2); box-shadow: var(--shadow-modern); }
         .pricing-card.popular { border: 2px solid var(--primary); box-shadow: 0 15px 40px var(--primary-glow); z-index: 10; }
         .badge-popular { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; box-shadow: 0 0 15px var(--primary-glow); width: max-content;}
+        
         .p-tier { font-size: 22px; font-weight: 800; color: var(--text-light); margin-bottom: 8px; }
         .p-desc { font-size: 14px; color: var(--text-muted-dark); margin-bottom: 30px; min-height: 40px; line-height: 1.5; font-weight: 400;}
-        .p-price { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); }
-        .p-setup { font-size: 32px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; }
-        .p-setup span { font-size: 15px; color: var(--text-muted-dark); font-weight: 500; }
-        .p-monthly { font-size: 15px; color: var(--accent); font-weight: 700; margin-top: 10px; display: flex; align-items: center; gap: 8px; }
+        
+        .p-price { margin-bottom: 30px; padding-bottom: 25px; border-bottom: 1px solid rgba(148, 163, 184, 0.15); }
+        .p-strike { font-size: 14px; color: #EF4444; font-weight: 600; margin-bottom: 5px; text-decoration: line-through; opacity: 0.8; }
+        .p-setup { font-size: 38px; font-weight: 900; color: var(--text-light); letter-spacing: -1px; line-height: 1; }
+        .p-setup span { font-size: 15px; color: var(--text-muted-dark); font-weight: 500; letter-spacing: normal; }
+        .p-monthly { font-size: 13px; color: var(--accent); font-weight: 700; margin-top: 12px; display: inline-block; background: rgba(45, 212, 191, 0.1); padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(45, 212, 191, 0.2); }
+        
         .p-features { list-style: none; padding: 0; margin: 0 0 35px 0; flex-grow: 1; }
         .p-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--text-light); margin-bottom: 16px; font-weight: 500; line-height: 1.4;}
         .p-features li b { color: var(--primary-light); font-weight: 600; }
@@ -114,7 +116,6 @@
         /* ADMIN TABS & ROWS */
         .admin-tab { padding: 8px 16px; font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; border: 1px solid transparent; background: transparent; color: var(--text-muted-dark); transition: 0.3s; }
         .admin-tab.active { background: rgba(129, 140, 248, 0.15); border-color: var(--primary); color: var(--primary-light); box-shadow: 0 0 10px var(--primary-glow); }
-        
         .admin-row { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.15); border-radius: 14px; margin-bottom: 12px; gap: 15px; flex-wrap: wrap; transition: transform 0.2s; }
         .admin-row:hover { transform: scale(1.01); background: rgba(30, 41, 59, 0.8); border-color: rgba(148, 163, 184, 0.3); }
 
@@ -156,7 +157,7 @@
                     Trasformo il tuo business con Web App su misura. Ricevi appuntamenti, vendi online e gestisci i clienti via WhatsApp, dimenticando i software in abbonamento e le agende cartacee.
                 </p>
                 <button onclick="apriSezione('pacchetti', document.getElementById('nav-btn-pacchetti'))" style="background: var(--primary); color: white; border: none; padding: 18px 36px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 25px var(--primary); font-family: inherit;">
-                    Esplora le Soluzioni Software
+                    Esplora i Piani Annuali
                 </button>
 
                 <div style="margin-top: 55px; border-top: 1px solid rgba(148, 163, 184, 0.1); padding-top: 35px;">
@@ -199,28 +200,44 @@
 
         <div id="pacchetti" class="section">
             <div class="pricing-grid">
+                
                 <div class="pricing-card">
                     <div class="p-tier">Starter Vetrina</div>
                     <div class="p-desc">Per chi vuole presentare il proprio business con una Web App installabile.</div>
-                    <div class="p-price"><div class="p-setup">250€ <span>/ Setup unico</span></div><div class="p-monthly">+ 49€ / mese manutenzione</div></div>
+                    <div class="p-price">
+                        <div class="p-strike">Valore: 838€</div>
+                        <div class="p-setup">740€ <span>/ 1° anno</span></div>
+                        <div class="p-monthly">🎁 Setup + 12 Mesi (2 in Regalo)</div>
+                    </div>
                     <ul class="p-features"><li>Creazione Web App (PWA)</li><li>Sezioni Chi Sono / Servizi</li><li><b>Modulo Contatti base</b></li><li>Dashboard Admin essenziale</li><li>Dominio e Hosting inclusi</li></ul>
                     <button class="btn-pricing" onclick="preparaContatto('Starter')">Seleziona Starter</button>
                 </div>
+
                 <div class="pricing-card popular">
                     <div class="badge-popular">Ideale per Professionisti</div>
                     <div class="p-tier" style="color: var(--primary);">Pro Booking</div>
                     <div class="p-desc">Calendario appuntamenti integrato per far prenotare i clienti in autonomia h24.</div>
-                    <div class="p-price"><div class="p-setup" style="color: var(--primary);">350€ <span>/ Setup unico</span></div><div class="p-monthly" style="color: var(--primary);">+ 149€ / mese gestione</div></div>
+                    <div class="p-price">
+                        <div class="p-strike">Valore: 2.138€</div>
+                        <div class="p-setup" style="color: var(--primary);">1.840€ <span>/ 1° anno</span></div>
+                        <div class="p-monthly">🎁 Setup + 12 Mesi (2 in Regalo)</div>
+                    </div>
                     <ul class="p-features"><li><b>Tutto il piano Starter</b></li><li><b>Calendario Appuntamenti</b></li><li>Gestione orari e slot</li><li>Pannello approvazione</li><li>Integrazione chat WhatsApp</li></ul>
                     <button class="btn-pricing filled" onclick="preparaContatto('Pro Booking')">Seleziona PRO</button>
                 </div>
+
                 <div class="pricing-card">
                     <div class="p-tier">VIP E-Commerce</div>
                     <div class="p-desc">Vendi i tuoi prodotti o accetta ordini di asporto direttamente dall'App.</div>
-                    <div class="p-price"><div class="p-setup">450€ <span>/ Setup unico</span></div><div class="p-monthly">+ 299€ / mese gestione</div></div>
+                    <div class="p-price">
+                        <div class="p-strike">Valore: 4.038€</div>
+                        <div class="p-setup">3.440€ <span>/ 1° anno</span></div>
+                        <div class="p-monthly">🎁 Setup + 12 Mesi (2 in Regalo)</div>
+                    </div>
                     <ul class="p-features"><li><b>Tutto il piano Pro Booking</b></li><li><b>Catalogo prodotti dinamico</b></li><li><b>Carrello acquisti</b> in App</li><li>Ordini diretti su WA o Stripe</li><li>Zero commissioni vendite</li></ul>
                     <button class="btn-pricing" onclick="preparaContatto('VIP E-Commerce')">Seleziona VIP</button>
                 </div>
+
             </div>
         </div>
 
@@ -236,9 +253,9 @@
                         <label>Servizio Software di Interesse</label>
                         <select id="con-pacchetto">
                             <option value="">Seleziona un'opzione...</option>
-                            <option value="Starter">Starter Vetrina (250€ + 49€/m)</option>
-                            <option value="Pro Booking">Pro Booking (Appuntamenti) (350€ + 149€/m)</option>
-                            <option value="VIP E-Commerce">VIP E-Commerce (Vendita) (450€ + 299€/m)</option>
+                            <option value="Starter">Starter Vetrina (Piano Annuale: 740€)</option>
+                            <option value="Pro Booking">Pro Booking (Piano Annuale: 1.840€)</option>
+                            <option value="VIP E-Commerce">VIP E-Commerce (Piano Annuale: 3.440€)</option>
                             <option value="Altro">Vorrei un software personalizzato / Info Generiche</option>
                         </select>
                     </div>
@@ -316,7 +333,6 @@
             document.getElementById(id).classList.add('active');
             if (el) el.classList.add('active');
             if(!bloccaScroll) window.scrollTo({ top: 0, behavior: 'smooth' });
-            
             if(id === 'admin') caricaRichiesteAdmin();
         };
 
@@ -359,9 +375,7 @@
                     document.getElementById('btn-nav-admin').style.display = 'inline-block';
                     apriSezione('admin', document.getElementById('btn-nav-admin'));
                     showToast("Accesso Admin effettuato con successo!");
-                } else if (psw !== null) {
-                    showToast("Password errata.", true);
-                }
+                } else if (psw !== null) { showToast("Password errata.", true); }
                 adminClicks = 0;
             }
         };
@@ -385,28 +399,17 @@
             btn.disabled = true; btn.innerText = "Invio in corso...";
 
             const { error } = await clientSupabase.from('prenotazioni').insert([{
-                nome: attivita, 
-                nome_cliente: nomeCliente,
-                email: email,
-                telefono: tel, 
-                servizio: pacchetto, 
-                data_prenotazione: "Da concordare", 
-                ora_prenotazione: "Da concordare", 
-                note: note, 
-                stato: "Nuova"
+                nome: attivita, nome_cliente: nomeCliente, email: email, telefono: tel, 
+                servizio: pacchetto, data_prenotazione: "Da concordare", ora_prenotazione: "Da concordare", note: note, stato: "Nuova"
             }]);
 
             if (error) {
-                showToast("Errore di connessione al database.", true);
-                console.error(error);
+                showToast("Errore di connessione al database.", true); console.error(error);
             } else {
                 showToast("Richiesta inviata con successo!");
-                document.getElementById('con-pacchetto').value = '';
-                document.getElementById('con-nome').value = '';
-                document.getElementById('con-attivita').value = '';
-                document.getElementById('con-tel').value = '';
-                document.getElementById('con-email').value = '';
-                document.getElementById('con-note').value = '';
+                document.getElementById('con-pacchetto').value = ''; document.getElementById('con-nome').value = '';
+                document.getElementById('con-attivita').value = ''; document.getElementById('con-tel').value = '';
+                document.getElementById('con-email').value = ''; document.getElementById('con-note').value = '';
             }
             btn.disabled = false; btn.innerText = "📩 Invia Richiesta (Senza Impegno)";
         };
