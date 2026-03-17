@@ -342,10 +342,10 @@
     <script>
         // ==========================================
         // 1. CONFIGURAZIONE SUPABASE
-        // DA CAMBIARE CON LE TUE NUOVE CHIAVI PRIMA DI ANDARE ONLINE
+        // AGGIORNATA CON LE TUE CHIAVI DEFINITIVE
         // ==========================================
-        const SUPABASE_URL = 'https://zwubscpykgprkrnwukdc.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dWJzY3B5a2dwcmtybnd1a2RjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3OTEzODIsImV4cCI6MjA4ODM2NzM4Mn0.4zsMugqI-kveF7eMqLVgbLhGe-tLOlhqWfR2dtYQipU';
+        const SUPABASE_URL = 'https://fkfvaxfvsnspkfxiswhd.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrZnZheGZ2c25zcGtmeGlzd2hkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3MzY2OTQsImV4cCI6MjA4OTMxMjY5NH0.QKrlFHzrMiVGTdMolTlVIUUZ2OB_yE_2lc2BM5YoxeE';
         
         const clientSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -366,7 +366,6 @@
             apriSezione('inizia-ora', document.getElementById('nav-btn-inizia'));
             const select = document.getElementById('con-pacchetto');
             if(select) {
-                // Pre-selezioniamo l'opzione corretta in base al testo cliccato
                 if(nomePacchetto.includes('Starter')) select.selectedIndex = 1;
                 else if(nomePacchetto.includes('Pro')) select.selectedIndex = 2;
                 else if(nomePacchetto.includes('VIP')) select.selectedIndex = 3;
@@ -427,7 +426,8 @@
             }]);
 
             if (error) {
-                showToast("Errore di connessione. Riprova più tardi.", true);
+                showToast("Errore di connessione al database.", true);
+                console.error(error);
             } else {
                 showToast("Richiesta inviata con successo!");
                 document.getElementById('con-pacchetto').value = '';
