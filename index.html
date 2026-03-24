@@ -381,6 +381,22 @@
         © <span id="year"></span> EC Web App. Progettato e Sviluppato a Mantova.
     </footer>
 
+    <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(15,23,42,0.9); z-index:9999; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+        <div class="info-card" style="width: 90%; max-width: 400px; border-color: var(--primary); animation: slideUp 0.4s ease;">
+            <h2 class="section-title" style="font-size: 24px;">Accesso <span>Admin</span> 🔐</h2>
+            <div class="form-group">
+                <label>Email Admin</label>
+                <input type="email" id="admin-email" placeholder="La tua email Supabase">
+            </div>
+            <div class="form-group" style="margin-bottom: 30px;">
+                <label>Password</label>
+                <input type="password" id="admin-password" placeholder="••••••••">
+            </div>
+            <button class="btn-submit" id="btn-esegui-login" onclick="eseguiLoginAdmin()">Entra nell'Area Riservata</button>
+            <button onclick="chiudiLogin()" style="width: 100%; background: transparent; color: var(--text-muted-dark); border: none; margin-top: 15px; cursor: pointer; font-weight: 600;">Annulla</button>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script>
@@ -462,20 +478,51 @@
         }
 
         // ==========================================
-        // 3. ACCESSO SEGRETO ADMIN
+        // 3. VERO ACCESSO SEGRETO ADMIN (SUPABASE AUTH)
         // ==========================================
         let adminClicks = 0; let adminTimer;
+        
         window.clickSegreto = function() {
             adminClicks++; clearTimeout(adminTimer);
             adminTimer = setTimeout(() => { adminClicks = 0; }, 1000); 
             if (adminClicks === 3) {
-                let psw = prompt("🔐 Accesso Area Privata EC. Inserisci la password:");
-                if (psw === "boss") {
-                    document.getElementById('btn-nav-admin').style.display = 'inline-block';
-                    apriSezione('admin', document.getElementById('btn-nav-admin'));
-                    showToast("Accesso Admin effettuato con successo!");
-                } else if (psw !== null) { showToast("Password errata.", true); }
+                document.getElementById('login-modal').style.display = 'flex';
                 adminClicks = 0;
+            }
+        };
+
+        window.chiudiLogin = function() {
+            document.getElementById('login-modal').style.display = 'none';
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
+        };
+
+        window.eseguiLoginAdmin = async function() {
+            const email = document.getElementById('admin-email').value.trim();
+            const password = document.getElementById('admin-password').value.trim();
+
+            if(!email || !password) {
+                showToast("Inserisci email e password.", true); return;
+            }
+
+            const btn = document.getElementById('btn-esegui-login');
+            btn.disabled = true; btn.innerText = "Accesso in corso...";
+
+            const { data, error } = await clientSupabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (error) {
+                showToast("Credenziali errate o utente inesistente.", true);
+                console.error(error);
+                btn.disabled = false; btn.innerText = "Entra nell'Area Riservata";
+            } else {
+                showToast("Accesso Admin effettuato con successo!");
+                chiudiLogin();
+                document.getElementById('btn-nav-admin').style.display = 'inline-block';
+                apriSezione('admin', document.getElementById('btn-nav-admin'));
+                btn.disabled = false; btn.innerText = "Entra nell'Area Riservata";
             }
         };
 
@@ -615,7 +662,20 @@
             });
         };
         
-        window.onload = function() { caricaRichiesteAdmin(); };
+        // ==========================================
+        // 6. CONTROLLO SESSIONE AL CARICAMENTO
+        // ==========================================
+        window.controllaSessione = async function() {
+            const { data: { session } } = await clientSupabase.auth.getSession();
+            if (session) {
+                // Se sei già loggato in precedenza, mostra il pulsante Admin automaticamente
+                document.getElementById('btn-nav-admin').style.display = 'inline-block';
+            }
+        };
+
+        window.onload = function() { 
+            controllaSessione(); 
+        };
     </script>
 </body>
 </html>
